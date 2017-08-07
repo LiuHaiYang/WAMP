@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	        <!-- AngularJS -->
+       <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+
+        <!-- AutobahnJS -->
+        <script src="bower_components/autobahn/autobahn.js"></script>
+
+        <!-- AngularWAMP -->
+        <script src="bower_components/angular-wamp/release/angular-wamp.js"></script>
+</head>
+<body>
+    <div ng-app="myApp" ng-controller="MyCtrl">
+    	<div ng-model="hello">
+    		{{hello}}
+    	</div>
+
+    	<div ng-model="add2">
+    		{{add2}}
+    	</div>
+    </div>
+<script type="text/javascript">
+var app = angular.module("myApp", ["vxWamp"]);//定义myApp这个模块
+app.config(function ($wampProvider) {
+	$wampProvider.init({
+ 	 url: 'ws://www.wugeek.cn:8090/ws',
+ 	realm: 'realm1'
+ 	//Any other AutobahnJS options
+ 	});
+}) 
+app.controller("MyCtrl", function($scope, $wamp) {
+	// 1) subscribe to a topic
+	function onevent(args) {
+        console.log(args)
+	}
+	$wamp.subscribe('LTC_real_data', onevent);
+
+	// // 2) publish an event
+	// $wamp.publish('com.myapp.hello', ['Hello, world!']);   
+
+	// // 3) register a procedure for remoting
+	// function add2(args) {
+	//     return args[0] + args[1];
+	// }
+	// $wamp.register('com.myapp.add2', add2);
+
+	// // 4) call a remote procedure
+	// $wamp.call('com.myapp.add2', [2, 3]).then(
+	//     function (res) {
+	//         $scope.add2 = res;
+	//     });   
+	});
+
+   app.run(function($wamp){
+        $wamp.open();
+    })
+</script>
+</body>
+</html>

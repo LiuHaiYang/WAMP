@@ -1,0 +1,49 @@
+{
+    "version": 2,
+    "workers": [
+        {
+            "type": "router", # 路由
+            "realms": [ # 领域
+                {
+                    "name": "realm1",
+                    "roles": [ #角色
+                        {
+                            "name": "anonymous", #所有人
+                            "permissions": [ #权限
+                                {
+                                    "uri": "",
+                                    "match": "prefix",  #匹配  ： 任何人
+                                    "allow": { # 允许
+                                        "call": true, #访问
+                                        "register": true, #索引
+                                        "publish": true, #发
+                                        "subscribe": true  #收 订阅
+                                    },
+                                    "disclose": { #公开
+                                        "caller": false, #呼叫者
+                                        "publisher": false #发布者
+                                    },
+                                    "cache": true  #弄碎
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "transports": [#传输
+                {
+                    "type": "web",
+                    "endpoint": { #端口
+                        "type": "tcp",
+                        "port": 8080
+                    },
+                    "paths": {#路径
+                        "ws": {
+                            "type": "websocket"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
